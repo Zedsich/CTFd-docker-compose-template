@@ -1,0 +1,40 @@
+version: '3'
+services:
+  scr1wgpt-web:
+    build: .
+    restart: always
+    command: python /app/app.py
+    env_file:
+      - .env
+    environment:
+      - FLAG=${FLAG}
+    depends_on:
+      - scr1wgpt-mysql
+
+  scr1wgpt-mysql:
+    build:
+      context: .
+      dockerfile: SQLDockerfile
+    restart: always
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=sssctf2024_rootpassword
+
+  scr1wgpt:
+    image: shiraikuroko/gpt
+    dns:
+      - 202.118.66.6
+    environment:
+      - OPENAI_API_KEY=sk-GLmXjAuE59VSvNAH1VvjHj0HaCZQYFsRNN7FfBNTSsi5AHZw
+      - BASE_URL=https://api.chatanywhere.tech
+      - CODE=sssctf2024
+
+  scr1wgpt-nginx:
+    image: zedsich/scr1wgpt-nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - scr1wgpt-web
+      - scr1wgpt
+    ports:
+        - "9999:80"

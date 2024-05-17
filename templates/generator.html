@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Flag Generator</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+        background-color: #f4f4f9;
+        color: #333;
+    }
+    h1 {
+        color: #333;
+    }
+    #progressBarContainer {
+        width: 50%;
+        height: 30px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        border-radius: 15px;
+        overflow: hidden;
+        margin: 20px auto;
+    }
+    #progressBar {
+        height: 100%;
+        width: 0%;
+        background-color: #4CAF50;
+        border-radius: 14px;
+        transition: width 0.4s ease-in-out;
+    }
+    #message {
+        margin-top: 20px;
+        font-size: 24px;
+        color: #2c3e50;
+        display: none; /* Initially hide message */
+    }
+</style>
+<script>
+    function updateProgressBar() {
+        var bar = document.getElementById('progressBar');
+        var message = document.getElementById('message');
+        var width = 0;
+        var interval = setInterval(function() {
+            if (width >= 100) {
+                clearInterval(interval);
+                setTimeout(function() { // Add a timeout to delay the message display
+                    message.style.display = 'block';
+                }, 1000); // Delay display by 1000ms (1 second)
+            } else {
+                width++;
+                bar.style.width = width + '%';
+            }
+        }, 100); // Update progress every 100ms
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateProgressBar(); // Start the progress bar on page load
+    });
+</script>
+</head>
+<body>
+<h1>Generating Your Flag...</h1>
+<div id="progressBarContainer">
+    <div id="progressBar"></div>
+</div>
+<div id="message">{{ message }}</div> <!-- Message displayed after progress completion -->
+</body>
+</html>
